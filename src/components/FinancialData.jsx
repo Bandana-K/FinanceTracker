@@ -5,25 +5,26 @@ import Analytics from './Analytics';
 const FinancialData = ({ profile }) => {
   const [formData, setFormData] = useState({
     date: new Date().toISOString().slice(0, 10),
-    directEquity: 0,
+    direct_equity: 0,
     esops: 0,
-    equityPms: 0,
+    equity_pms: 0,
     ulip: 0,
-    realEstate: 0,
-    realEstateFunds: 0,
-    privateEquity: 0,
-    equityMutualFunds: 0,
-    structuredProductsEquity: 0,
-    bankBalance: 0,
-    debtMutualFunds: 0,
-    endowmentPlans: 0,
-    fixedDeposits: 0,
+    real_estate: 0,
+    real_estate_funds: 0,
+    private_equity: 0,
+    equity_mutual_funds: 0,
+    structured_products_equity: 0,
+    bank_balance: 0,
+    debt_mutual_funds: 0,
+    endowment_plans: 0,
+    fixed_deposits: 0,
     nps: 0,
     epf: 0,
     ppf: 0,
-    structuredProductsDebt: 0,
-    goldEtfs: 0,
+    structured_products_debt: 0,
+    gold_etfs: 0,
   });
+
   const [showAnalytics, setShowAnalytics] = useState(false);
 
   const handleChange = (e) => {
@@ -33,16 +34,31 @@ const FinancialData = ({ profile }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { data, error } = await supabase.from('financial_data').insert([
-      {
-        profile_id: profile.id,
-        ...formData,
-      },
-    ]);
+
+    // Get the authenticated user's ID
+    const { data: { user }, error } = await supabase.auth.getUser();
+
     if (error) {
-      alert(error.message);
+      console.error("Error fetching user:", error);
+      return;
+    }
+
+    // Add user_id to the data being sent
+    const dataToInsert = {
+      ...formData,
+      profile_id: profile.id,
+      user_id: user.id, // Ensure user_id is passed correctly
+    };
+
+    // Insert data into the financial_data table
+    const { data, error: insertError } = await supabase
+      .from("financial_data")
+      .insert([dataToInsert]);
+
+    if (insertError) {
+      console.error("Error inserting financial data:", insertError);
     } else {
-      alert('Financial data saved successfully!');
+      console.log("Financial data saved successfully:", data);
     }
   };
 
