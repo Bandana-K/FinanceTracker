@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabase';
+import Analytics from './Analytics';
 
 const FinancialData = ({ profile }) => {
   const [formData, setFormData] = useState({
@@ -23,6 +24,7 @@ const FinancialData = ({ profile }) => {
     structuredProductsDebt: 0,
     goldEtfs: 0,
   });
+  const [showAnalytics, setShowAnalytics] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,9 +46,14 @@ const FinancialData = ({ profile }) => {
     }
   };
 
+  if (showAnalytics) {
+    return <Analytics profile={profile} />;
+  }
+
   return (
     <div>
       <h2>Financial Data Entry for {profile.name}</h2>
+      <button onClick={() => setShowAnalytics(true)}>View Analytics</button>
       <form onSubmit={handleSubmit}>
         <label>Date:</label>
         <input

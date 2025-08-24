@@ -19,6 +19,7 @@ I would like to build a **responsive web application** to track personal finance
 - [x] Created Login/Sign-up UI components
 - [x] Implemented Profile Management UI
 - [x] Created Financial Data Entry form
+- [x] Implemented Visual Analytics (Pie and Line charts)
 
 ### **1. User Authentication**
 
